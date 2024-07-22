@@ -29,6 +29,7 @@ app.use(cors());
 //routes
 app.use("/auth",require("./routes/authRoute"))
 app.use('/users',require('./routes/userRoute'));
+app.use("/appointment",require('./routes/appointmentRoute'))
 
 
 //port
