@@ -53,7 +53,7 @@ const findAppointmentByDateTime = async (doctorId,dateAppointment) => {
       doctor : doctorID
     })
 
-    if(!appointments){
+    if(!appointments.length){
       return res.status(400).json({ error: 'there is no appointments for you' });
     }
 
@@ -77,7 +77,7 @@ const getAppointmentByPatientId= async (req , res) =>{
       patient : patientID
     })
 
-    if(!appointments){
+    if(!appointments.length){
       return res.status(400).json({ error: 'there is no appointments for you' });
     }
 
@@ -87,11 +87,39 @@ const getAppointmentByPatientId= async (req , res) =>{
     console.error("there is an error while getting data", error);
     res.status(400).json({ error: error.message });
   }
+  };
 
+  //get appointments with status 
+
+  const getAppointmentsWithStatus = async (req , res)=>{
+
+    try {
+      const { status } = req.query;
+  
+      if (!status) {
+        return res.status(400).json({ error: 'Status is required' });
+      }
+  
+      console.log(`Recherche des rendez-vous avec le statut : ${status}`);
+  
+      const appointments = await Appointment.find({ status });
+  
+      if (!appointments.length) {
+        return res.status(404).json({ message: 'No appointments found with this status' });
+      }
+  
+      res.status(200).json(appointments);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des rendez-vous :", error);
+      res.status(500).json({ error: 'An error occurred while retrieving appointments' });
+    }
   }
+
+
 
 module.exports ={
     createAppointment ,
     getAppointmentByDoctorId,
-    getAppointmentByPatientId
+    getAppointmentByPatientId,
+    getAppointmentsWithStatus
 }
