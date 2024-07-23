@@ -1,7 +1,8 @@
 const appointmentStatus= {
-    PLANIFIED : 'PLANIFIED',
-    FINISHED : 'FINISHED',
-    CANCLED : 'CANCLED'
+    PLANIFIED : 'planified',
+    FINISHED : 'finished',
+    CANCLED : 'cancled',
+    UNPLANNED : 'unplanned '
     
 }
 

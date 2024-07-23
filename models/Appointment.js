@@ -4,22 +4,20 @@ const type= require("./enums/AppointmentType")
 const Schema = mongoose.Schema;
 
 
-const appoinmentSchema = mongoose.Schema ({
+const appointmentSchema = mongoose.Schema ({
 
-    dateAppoinment:{
+    dateAppointment:{
         type: Date ,
         required : true,
     },
     duration :{
         type: Number,
-        required : true ,
         default : 0.5
     },
     status:{
         type: String,
         enum : Object.values(status),
-        required : true , 
-        default : status.PLANIFIED
+        default : status.UNPLANNED
     },
     type :{
         type : String ,
@@ -39,4 +37,4 @@ const appoinmentSchema = mongoose.Schema ({
     }
 })
 
-module.exports  = mongoose.model("Appointment",appoinmentSchema)
+module.exports  = mongoose.model("Appointment",appointmentSchema)

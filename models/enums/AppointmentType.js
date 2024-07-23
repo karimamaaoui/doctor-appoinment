@@ -1,6 +1,6 @@
 const appointmentType= {
-    ONLINE : 'ONLINE',
-    IN_PERSON : 'IN_PERSON'
+    ONLINE : 'online',
+    IN_PERSON : 'in_person'
 
 }
 
