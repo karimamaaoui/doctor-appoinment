@@ -4,5 +4,6 @@ const appointementController = require("../controllers/appointmentController");
 
 router.post('/createAppointment', appointementController.createAppointment);
 router.get('/appointments',appointementController.getAppointmentByDoctorId);
+router.get('/patientAppointments' , appointementController.getAppointmentByPatientId);
 
 module.exports = router;

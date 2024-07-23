@@ -66,7 +66,32 @@ const findAppointmentByDateTime = async (doctorId,dateAppointment) => {
 
   }
 
+  //get all apontment with patientID
+
+const getAppointmentByPatientId= async (req , res) =>{
+
+    try {
+    const {patientID} = req.body ;
+
+    const appointments = await Appointment.find({
+      patient : patientID
+    })
+
+    if(!appointments){
+      return res.status(400).json({ error: 'there is no appointments for you' });
+    }
+
+    res.status(200).json(appointments);
+
+  } catch (error){
+    console.error("there is an error while getting data", error);
+    res.status(400).json({ error: error.message });
+  }
+
+  }
+
 module.exports ={
     createAppointment ,
-    getAppointmentByDoctorId
+    getAppointmentByDoctorId,
+    getAppointmentByPatientId
 }
