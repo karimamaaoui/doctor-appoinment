@@ -1,6 +1,7 @@
 const Appointment = require("../models/Appointment");
 const moment = require('moment-timezone');
 
+// CreatAppointment API
 const createAppointment = async (req , res) =>{
     try{
         const { dateTime, hourAppointment ,duration, status, type, doctor, patient } = req.body;
@@ -16,8 +17,6 @@ const createAppointment = async (req , res) =>{
 
         const newAppointment = new Appointment ({
             dateAppointment,
-            duration,
-            status,
             type,
             doctor,
             patient,
@@ -38,13 +37,36 @@ const findAppointmentByDateTime = async (doctorId,dateAppointment) => {
         dateAppointment });
       return appointment;
     } catch (error) {
-      console.error("Erreur lors de la recherche du rendez-vous :", error);
+      console.error("there is an error while getting data", error);
       throw new Error('Error finding appointment');
     }
   };
 
 
+  //get all apointment with doctorID 
+  const getAppointmentByDoctorId = async (req , res) =>{
+
+    try {
+    const {doctorID} = req.body ;
+
+    const appointments = await Appointment.find({
+      doctor : doctorID
+    })
+
+    if(!appointments){
+      return res.status(400).json({ error: 'there is no appointments for you' });
+    }
+
+    res.status(200).json(appointments);
+
+  } catch (error){
+    console.error("there is an error while getting data", error);
+    res.status(400).json({ error: error.message });
+  }
+
+  }
 
 module.exports ={
-    createAppointment
+    createAppointment ,
+    getAppointmentByDoctorId
 }
