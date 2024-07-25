@@ -126,7 +126,7 @@ const getAppointmentByPatientId= async (req , res) =>{
       const {doctorID}=req.params;
       const {type}=req.query;
 
-      if (!type & !doctorID) {
+      if (!type || !doctorID) {
         return res.status(400).json({ error: 'type & doctor ID are required' });
       }
 
@@ -148,11 +148,46 @@ const getAppointmentByPatientId= async (req , res) =>{
 
   }
 
+  //update appointment status
+  const updateAppointmentStatus = async (req , res )=>{
+
+    try{
+
+      const {appointmentID} = req.params;
+      const {appointmentStatus} = req.body;
+
+      if(!appointmentID || !appointmentStatus){
+
+        return res.status(400).json({ error: 'Appointment ID and status are required' });
+
+      }
+
+      const updatedAppointment = await Appointment.findByIdAndUpdate(
+        appointmentID,
+        { status : appointmentStatus },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedAppointment) {
+        return res.status(404).json({ error: 'Appointment not found' });
+      }
+  
+      res.status(200).json(updatedAppointment);
+
+    }catch (error){
+      console.error("Erreur lors de la récupération des rendez-vous :", error);
+      res.status(500).json({ error: 'An error occurred while retrieving appointments' });
+    }
+
+  }
+
+
 
 module.exports ={
     createAppointment ,
     getAppointmentByDoctorId,
     getAppointmentByPatientId,
     getAppointmentsWithStatusDoctorID,
-    getAppointmentsWithTypeAndDoctorID
+    getAppointmentsWithTypeAndDoctorID,
+    updateAppointmentStatus
 }
