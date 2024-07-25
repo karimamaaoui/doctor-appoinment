@@ -8,4 +8,8 @@ router.get('/patientAppointments' , appointementController.getAppointmentByPatie
 router.get('/appointments/:doctorID/status', appointementController.getAppointmentsWithStatusDoctorID);
 router.get('/appointments/:doctorID/type',appointementController.getAppointmentsWithTypeAndDoctorID);
 router.put('/changeAppointmentStatus/:appointmentID', appointementController.updateAppointmentStatus);
+router.delete('/deleteAppointment/:appointmentID', appointementController.deleteAppointmentByID);
+router.get('/appointmentDetails/:appointmentID', appointementController.getAppointmentDetails);
+
+
 module.exports = router;
