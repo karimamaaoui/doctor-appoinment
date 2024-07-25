@@ -10,6 +10,7 @@ router.get('/appointments/:doctorID/type',appointementController.getAppointments
 router.put('/changeAppointmentStatus/:appointmentID', appointementController.updateAppointmentStatus);
 router.delete('/deleteAppointment/:appointmentID', appointementController.deleteAppointmentByID);
 router.get('/appointmentDetails/:appointmentID', appointementController.getAppointmentDetails);
-
+router.put('/postponeAppoinment/:appointmentID', appointementController.rescheduleAppointmentById);
+router.put('/updateAppointment/:appointmentID' , appointementController.updateAppointmentTypeById);
 
 module.exports = router;

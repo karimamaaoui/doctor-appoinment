@@ -236,6 +236,81 @@ const getAppointmentByPatientId= async (req , res) =>{
 
   }
 
+  //postpone appointment 
+  const rescheduleAppointmentById = async (req, res) =>{
+
+    try{
+
+      const {appointmentID} = req.params;
+      const { date , time }= req.body ;
+
+      if (!appointmentID || !date || !time) {
+        return res.status(400).json({ error: 'Appointment ID, date, and time are required' });
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(appointmentID)) {
+        return res.status(400).json({ error: 'Invalid appointment ID' });
+      }
+
+      const dateTime = moment.tz(`${date} ${time}`, 'YYYY-MM-DD HH:mm').toDate(); 
+
+      const updatedAppointment = await Appointment.findByIdAndUpdate(
+        appointmentID,
+        { dateAppointment: dateTime },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedAppointment) {
+        return res.status(404).json({ error: 'Appointment not found' });
+      }
+  
+      res.status(200).json(updatedAppointment);
+
+    }catch (error){
+      console.error("Erreur lors de la récupération des rendez-vous :", error);
+      res.status(500).json({ error: 'An error occurred while retrieving appointments' });
+    }
+
+  }
+
+  //update appointment type by id 
+  const updateAppointmentTypeById = async (req , res)=>{
+
+    try{
+
+      const {appointmentID} = req.params;
+      const {appointmentType} = req.body;
+
+      if(!appointmentID || !appointmentType){
+
+        return res.status(400).json({ error: 'Appointment ID and type are required' });
+
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(appointmentID)) {
+        return res.status(400).json({ error: 'Invalid appointment ID' });
+      }
+
+      const updatedAppointment = await Appointment.findByIdAndUpdate(
+        appointmentID,
+        { type: appointmentType },
+        { new: true, runValidators: true }
+      );
+
+      
+      if (!updatedAppointment) {
+        return res.status(404).json({ error: 'Appointment not found' });
+      }
+  
+      res.status(200).json(updatedAppointment);
+
+    }catch (error){
+      console.error("Erreur lors de la récupération des rendez-vous :", error);
+      res.status(500).json({ error: 'An error occurred while retrieving appointments' });
+    }
+
+  }
+
 
 module.exports ={
     createAppointment ,
@@ -245,5 +320,7 @@ module.exports ={
     getAppointmentsWithTypeAndDoctorID,
     updateAppointmentStatus,
     deleteAppointmentByID,
-    getAppointmentDetails
+    getAppointmentDetails,
+    rescheduleAppointmentById,
+    updateAppointmentTypeById
 }
