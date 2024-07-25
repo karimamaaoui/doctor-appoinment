@@ -89,20 +89,22 @@ const getAppointmentByPatientId= async (req , res) =>{
   }
   };
 
-  //get appointments with status 
+  //get appointments with status & doctorID
 
-  const getAppointmentsWithStatus = async (req , res)=>{
+  const getAppointmentsWithStatusDoctorID = async (req , res)=>{
 
     try {
       const { status } = req.query;
+      const {doctorID} = req.params;
   
-      if (!status) {
-        return res.status(400).json({ error: 'Status is required' });
+      if (!status & !doctorID) {
+        return res.status(400).json({ error: 'Status & doctor ID are required' });
       }
   
-      console.log(`Recherche des rendez-vous avec le statut : ${status}`);
-  
-      const appointments = await Appointment.find({ status });
+      const appointments = await Appointment.find({ 
+        doctor : doctorID,
+        status : status 
+       });
   
       if (!appointments.length) {
         return res.status(404).json({ message: 'No appointments found with this status' });
@@ -115,11 +117,42 @@ const getAppointmentByPatientId= async (req , res) =>{
     }
   }
 
+  //get appointments with type & docotorID
+
+  const getAppointmentsWithTypeAndDoctorID = async (req , res) =>{
+
+    try{
+
+      const {doctorID}=req.params;
+      const {type}=req.query;
+
+      if (!type & !doctorID) {
+        return res.status(400).json({ error: 'type & doctor ID are required' });
+      }
+
+      const appointments = await Appointment.find({
+        doctor : doctorID,
+        type : type
+      });
+
+      if (!appointments.length) {
+        return res.status(404).json({ message: 'No appointments found with this status' });
+      }
+  
+      res.status(200).json(appointments);
+
+    }catch (error){
+      console.error("Erreur lors de la récupération des rendez-vous :", error);
+      res.status(500).json({ error: 'An error occurred while retrieving appointments' });
+    }
+
+  }
 
 
 module.exports ={
     createAppointment ,
     getAppointmentByDoctorId,
     getAppointmentByPatientId,
-    getAppointmentsWithStatus
+    getAppointmentsWithStatusDoctorID,
+    getAppointmentsWithTypeAndDoctorID
 }
